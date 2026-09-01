@@ -1,0 +1,33 @@
+## .NET / Visual Studio ##
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+[Xx]64/
+[Xx]86/
+[Ll]og/
+[Ll]ogs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+
+## Rider / IDEA ##
+.idea/
+*.iml
+
+## Node (frontend, in case run from repo root) ##
+node_modules/
+
+## Docker ##
+*.env
+.env.*
+
+## OS files ##
+.DS_Store
+Thumbs.db
+
+## Misc ##
+*.log
+*.tmp

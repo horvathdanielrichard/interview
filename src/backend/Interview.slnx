@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Interview.API/Interview.API.csproj" />
+  <Project Path="Interview.Application/Interview.Application.csproj" />
+  <Project Path="Interview.Domain/Interview.Domain.csproj" />
+  <Project Path="Interview.Infrastructure/Interview.Infrastructure.csproj" />
+</Solution>

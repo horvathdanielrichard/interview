@@ -1,0 +1,24 @@
+﻿<mat-toolbar color="primary" class="!flex !justify-between">
+  <a routerLink="/" class="text-white no-underline text-lg font-semibold">Hero Missions</a>
+
+  <button mat-icon-button [matMenuTriggerFor]="notificationsMenu" aria-label="Notifications">
+    <mat-icon [matBadge]="notificationService.notifications().length || null" matBadgeColor="warn">
+      notifications
+    </mat-icon>
+  </button>
+
+  <mat-menu #notificationsMenu="matMenu" class="max-w-sm">
+    @if (notificationService.notifications().length === 0) {
+      <div class="px-4 py-3 text-sm text-gray-500">No notifications yet</div>
+    } @else {
+      @for (notification of notificationService.notifications(); track notification.timestamp) {
+        <div class="px-4 py-2 text-sm border-b border-gray-100 last:border-0">
+          <div class="font-medium">{{ notification.missionName }}</div>
+          <div class="text-xs text-gray-500">{{ notification.status }} &middot; {{ notification.timestamp | date: 'short' }}</div>
+        </div>
+      }
+    }
+  </mat-menu>
+</mat-toolbar>
+
+<router-outlet></router-outlet>

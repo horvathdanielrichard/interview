@@ -1,0 +1,137 @@
+<div class="p-6 max-w-6xl mx-auto">
+  <button mat-button (click)="back()" class="mb-4">
+    <mat-icon>arrow_back</mat-icon>
+    Back to missions
+  </button>
+
+  @if (loading()) {
+    <div class="flex justify-center py-12">
+      <mat-spinner></mat-spinner>
+    </div>
+  } @else if (mission(); as m) {
+    <mat-card class="mb-6">
+      <mat-card-header>
+        <mat-card-title>{{ m.name }}</mat-card-title>
+        <mat-card-subtitle>{{ m.status }} &middot; Duration {{ m.duration }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="mb-3">{{ m.description }}</p>
+        <div class="grid grid-cols-5 gap-2 text-sm">
+          <div>
+            <div class="text-gray-500">Strength</div>
+            <div [class.text-green-600]="totals().strength >= m.requiredStrength" [class.text-red-600]="totals().strength < m.requiredStrength">
+              {{ totals().strength }} / {{ m.requiredStrength }}
+            </div>
+          </div>
+          <div>
+            <div class="text-gray-500">Speed</div>
+            <div [class.text-green-600]="totals().speed >= m.requiredSpeed" [class.text-red-600]="totals().speed < m.requiredSpeed">
+              {{ totals().speed }} / {{ m.requiredSpeed }}
+            </div>
+          </div>
+          <div>
+            <div class="text-gray-500">Intelligence</div>
+            <div [class.text-green-600]="totals().intelligence >= m.requiredIntelligence" [class.text-red-600]="totals().intelligence < m.requiredIntelligence">
+              {{ totals().intelligence }} / {{ m.requiredIntelligence }}
+            </div>
+          </div>
+          <div>
+            <div class="text-gray-500">Durability</div>
+            <div [class.text-green-600]="totals().durability >= m.requiredDurability" [class.text-red-600]="totals().durability < m.requiredDurability">
+              {{ totals().durability }} / {{ m.requiredDurability }}
+            </div>
+          </div>
+          <div>
+            <div class="text-gray-500">Energy</div>
+            <div [class.text-green-600]="totals().energy >= m.requiredEnergy" [class.text-red-600]="totals().energy < m.requiredEnergy">
+              {{ totals().energy }} / {{ m.requiredEnergy }}
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    @if (canAssign()) {
+      <div cdkDropListGroup class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <mat-card>
+          <mat-card-header><mat-card-title>Hero Roster</mat-card-title></mat-card-header>
+          <mat-card-content>
+            <div
+              cdkDropList
+              [cdkDropListData]="roster()"
+              (cdkDropListDropped)="drop($event)"
+              class="min-h-[16rem] flex flex-col gap-2 p-2"
+            >
+              @for (hero of roster(); track hero.id) {
+                <div cdkDrag class="rounded border border-gray-200 bg-white p-3 shadow-sm cursor-move">
+                  <div class="font-medium">{{ hero.name }}</div>
+                  <div class="text-xs text-gray-500">{{ hero.alterEgo }}</div>
+                  <div class="text-xs text-gray-400 mt-1">
+                    STR {{ hero.strength }} · SPD {{ hero.speed }} · INT {{ hero.intelligence }} · DUR
+                    {{ hero.durability }} · ENE {{ hero.energy }}
+                  </div>
+                </div>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card>
+          <mat-card-header><mat-card-title>Assigned Squad</mat-card-title></mat-card-header>
+          <mat-card-content>
+            <div
+              cdkDropList
+              [cdkDropListData]="squad()"
+              (cdkDropListDropped)="drop($event)"
+              class="min-h-[16rem] flex flex-col gap-2 p-2"
+            >
+              @for (hero of squad(); track hero.id) {
+                <div cdkDrag class="rounded border border-blue-200 bg-blue-50 p-3 shadow-sm cursor-move">
+                  <div class="font-medium">{{ hero.name }}</div>
+                  <div class="text-xs text-gray-500">{{ hero.alterEgo }}</div>
+                  <div class="text-xs text-gray-400 mt-1">
+                    STR {{ hero.strength }} · SPD {{ hero.speed }} · INT {{ hero.intelligence }} · DUR
+                    {{ hero.durability }} · ENE {{ hero.energy }}
+                  </div>
+                </div>
+              }
+              @if (squad().length === 0) {
+                <p class="text-sm text-gray-400 text-center py-8">Drag heroes here to assign them</p>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div class="flex justify-end mt-4">
+        <button
+          mat-flat-button
+          color="primary"
+          [disabled]="squad().length === 0 || sending()"
+          (click)="sendOnMission()"
+        >
+          @if (sending()) {
+            <mat-icon class="animate-spin">autorenew</mat-icon>
+          } @else {
+            <mat-icon>rocket_launch</mat-icon>
+          }
+          Send on Mission
+        </button>
+      </div>
+    } @else {
+      <mat-card>
+        <mat-card-header><mat-card-title>Assigned Squad</mat-card-title></mat-card-header>
+        <mat-card-content>
+          <div class="flex flex-col gap-2">
+            @for (hero of squad(); track hero.id) {
+              <div class="rounded border border-gray-200 bg-white p-3 shadow-sm">
+                <div class="font-medium">{{ hero.name }}</div>
+                <div class="text-xs text-gray-500">{{ hero.alterEgo }}</div>
+              </div>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+    }
+  }
+</div>
